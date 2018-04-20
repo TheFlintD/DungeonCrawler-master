@@ -9,11 +9,17 @@ class GameObject {
 		void update();
 		void attack();
 		void render();
+		const char* getRole();
+		int getPos();
+
 
 		int health;
 		int energy;
 		int damage;
 		char status;
+
+		SDL_Rect getDestRect();
+		bool checkMouse(int x, int y);
 
 	private:
 		int xpos;

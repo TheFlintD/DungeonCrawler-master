@@ -3,14 +3,16 @@
 #include "GameObject.h"
 #include "UIElements.h"
 #include "Background.h"
+#include "SelectCharacter.h"
 #include <iostream>
 using namespace std;
 
-GameObject* _player, *_player2, *_player3, *_player4;
+GameObject* _player, *_player2, *_player3, *_player4, *_selected;
+
 UIElements* _button1, *_button2, *_button3;
 Background* _background;
+SelectCharacter* _select, *_select2;
 
-bool back = false;
 
 SDL_Rect srcR;
 
@@ -59,6 +61,8 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 	_button1 = new UIElements("sprites/buttons/button1_default.png", renderer, 100, 360, 1);
 	_button2 = new UIElements("sprites/buttons/button1_mouseover.png", renderer, 100, 360, 1);
 	_button3 = new UIElements("sprites/buttons/button1_mousepress.png", renderer, 100, 360, 1);
+	_select = new SelectCharacter(renderer, _player, 'a');
+	_select2 = new SelectCharacter(renderer, _player, 'a');
 }
 
 void Game::handleEvents() {
@@ -67,38 +71,84 @@ void Game::handleEvents() {
 	SDL_Event event;
 	SDL_PollEvent(&event);
 	switch (event.type) {
-		// When clicking on "x" on window, this generates an event called SDL_QUIT
-		// This will be picked up under event.type and will set isRunning to false
-		// so when our loop checks if the game is running, it will stop it on the next loop
+
 	case SDL_QUIT:
 		isRunning = false;
 		break;
 	case SDL_MOUSEMOTION:
 		x = event.motion.x;
 		y = event.motion.y;
-		if ((x > _button1->getDestRect().x) && (x < _button1->getDestRect().x + _button1->getDestRect().w) && (y > _button1->getDestRect().y) && (y < _button1->getDestRect().y + _button1->getDestRect().h)) {
+		if (_player->checkMouse(x,y)) {
+			if (!_select->selected) {
+				_select->character = _player;
+				_select->hover();
+			}
+			else {
+				_select2->character = _player;
+				_select2->hover();
+			}
+			mouseState = 1;
+		}
+		else if (_player2->checkMouse(x,y)) {
+			if(!_select->selected) {
+				_select->character = _player2;
+				_select->hover();
+			}
+		else {
+				_select2->character = _player2;
+				_select2->hover();
+			}
+			mouseState = 1;
+		}
+		else if (_player3->checkMouse(x, y)) {
+			if(!_select->selected) {
+				_select->character = _player3;
+				_select->hover();
+			}
+			else {
+				_select2->character = _player3;
+				_select2->hover();
+			}
+			mouseState = 1;
+		}
+		else if (_player4->checkMouse(x, y)) {
+			if(!_select->selected) {
+				_select->character = _player4;
+				_select->hover();
+			}
+			else {
+				_select2->character = _player4;
+				_select2->hover();
+			}
 			mouseState = 1;
 		}
 		else {
+			_select->deselect();
 			mouseState = 0;
 		}
 		break;
 	case SDL_MOUSEBUTTONDOWN:
 		x = event.button.x;
 		y = event.button.y;
-		if ((x > _button1->getDestRect().x) && (x < _button1->getDestRect().x + _button1->getDestRect().w) && (y > _button1->getDestRect().y) && (y < _button1->getDestRect().y + _button1->getDestRect().h)) {
+		if (_player->checkMouse(x,y)) {
+			_select->click(_player);
 			mouseState = 2;
-			cout << "Attack 1: 5 damage" << endl;
-			//_player->attack();
-			if (!back) {
-				_background->changeBackground("sprites/background2.png");
-				back = true;
-			}
-			else {
-				_background->changeBackground("sprites/background.png");
-				back = false;
-			}
-
+		}
+		else if (_player2->checkMouse(x, y)) {
+			_select->click(_player2);
+			mouseState = 2;
+		}
+		else if (_player3->checkMouse(x, y)) {
+			_select->click(_player3);
+			mouseState = 2;
+		}
+		else if (_player4->checkMouse(x, y)) {
+			_select->click(_player4);
+			mouseState = 2;
+		}
+		else {
+			_select->deselect();
+			mouseState = 0;
 		}
 		break;
 	case SDL_MOUSEBUTTONUP:
@@ -118,6 +168,10 @@ void Game::update() {
 	_button1->update();
 	_button2->update();
 	_button3->update();
+	if(!_select->selected)
+		_select->update();
+	if (!_select2->selected)
+		_select2->update();
 
 	srcR.h = 600;
 	srcR.w = 800;
@@ -137,13 +191,13 @@ void Game::render() {
 
 	switch (mouseState) {
 		case 0:
-			_button1->render();
+			_select->render();
 			break;
 		case 1:
-			_button2->render();
+			_select->render();
 			break;
 		case 2:
-			_button3->render();
+			_select->render();
 			break;
 		case 3:
 			break;

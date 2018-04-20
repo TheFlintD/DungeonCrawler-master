@@ -1,5 +1,6 @@
 #pragma once
 #include "Game.h"
+#include "GameObject.h"
 
 class UIElements {
 	public:
@@ -8,6 +9,9 @@ class UIElements {
 
 		void update();
 		void render();
+		void swapChar(GameObject a, GameObject b);
+		void attackChar(GameObject* a, GameObject* b);
+
 
 		SDL_Rect getDestRect();
 	private:

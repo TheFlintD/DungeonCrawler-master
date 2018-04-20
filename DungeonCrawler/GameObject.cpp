@@ -10,7 +10,7 @@ GameObject::GameObject(SDL_Renderer* ren, char type, const char* role, int posit
 	characterRole = role;
 	pos = position;
 	status = 'a';
-	switch (position)
+	switch (pos)
 	{
 	case 1:
 		xpos = 320;
@@ -97,8 +97,9 @@ void GameObject::update() {
 		srcRect.y = 0;
 		break;
 	case 'd':
-		srcRect.h = 0;
-		srcRect.w = 0;
+		objTexture = TextureManager::LoadTexture("sprites/allies/deadAlly.png", renderer);
+		srcRect.h = 120;
+		srcRect.w = 120;
 		srcRect.x = 0;
 		srcRect.y = 0;
 
@@ -116,12 +117,30 @@ void GameObject::update() {
 	destRect.h = srcRect.h;
 }
 
+SDL_Rect GameObject::getDestRect() {
+	return destRect;
+}
+
+bool GameObject::checkMouse(int x, int y) {
+	if ((x > this->getDestRect().x) && (x < this->getDestRect().x + this->getDestRect().w) && (this->getDestRect().y) && (y < this->getDestRect().y + this->getDestRect().h))
+		return true;
+	return false;
+}
+
+int GameObject::getPos() {
+	return pos;
+}
+
 void GameObject::attack() {
 	//enemy->health = enemy->health - damage;
 	health = health - damage;
 	cout << health << " / " << maxHealth << endl;
-	//if (enemy->health <= 0)
-	//	enemy->status = 'd';
+	if (health <= 0)
+		status = 'd';
+}
+
+const char* GameObject::getRole() {
+	return characterRole;
 }
 
 void GameObject::render() {

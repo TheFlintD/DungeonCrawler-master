@@ -136,17 +136,30 @@
   <ItemGroup>
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameObject.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MouseEvents.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="SelectCharacter.cpp" />
     <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="UIButton.cpp" />
     <ClCompile Include="UIElements.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Background.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObject.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="UIButton.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="SelectCharacter.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="UIElements.h" />
   </ItemGroup>
